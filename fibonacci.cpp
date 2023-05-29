@@ -1,6 +1,7 @@
-#include <chrono>
+#include "paradox.h"
 #include <iostream>
 #include <vector>
+
 using namespace std::chrono;
 using namespace std;
 
@@ -15,27 +16,32 @@ int f2(int n, vector<int> &dp) {
 	return dp[n] = f2(n-1, dp) + f2(n-2, dp);
 }
 
+int f3(int n) {
+	int curr, prev0 = 0, prev1 = 1;
+	for(int i = 2; i <= n; i++) {
+		curr = prev1 + prev0;
+		prev0 = prev1;
+		prev1 = curr;
+	}
+	return curr;
+}
+
 int main() {
 	int n, ans1, ans2;
 
 	cin >> n;
 	cout << "---" << endl;
 
-	vector<int> dp(n,-1);
+	vector<int> dp(n+1,-1);
 
-	auto start = high_resolution_clock::now();
 	ans1 = f1(n);
-	auto stop = high_resolution_clock::now();
-	cout << "Time taken for f1 = " << duration_cast<microseconds>(stop - start).count() << endl;
 	cout << "f1(" << n << ") = " << ans1 << endl << endl;
-
-	start = high_resolution_clock::now();
-	ans2 = f2(n, dp);
-	stop = high_resolution_clock::now();
-	cout << "Time taken for f1 = " << duration_cast<microseconds>(stop - start).count() << endl;
+	
+	ans2 = f2(n,dp);
 	cout << "f2(" << n << ") = " << ans2 << endl << endl;
 
-
+	ans2 = f3(n);
+	cout << "f3(" << n << ") = " << ans2 << endl << endl;
 
 	return 0;
 }
